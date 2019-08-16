@@ -13,6 +13,7 @@ function fetchSongs(){
 
 function displaySong(song){
     let songDiv = document.createElement('div')
+    songDiv.classList.add('song-card')
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
     songspan.innerText = song.name
@@ -22,12 +23,16 @@ function displaySong(song){
     let artistspan = document.createElement('span')
     artistspan.innerText = song.artist
     songDiv.appendChild(artistspan)
-    let playButton = document.createElement('button')
-    playButton.classList.add('button')
-    playButton.classList.add('play')
-    songDiv.insertBefore(playButton, songspan)
+    // create playDiv to wrap play button in. 
+    let playDiv = document.createElement('div')
+    playDiv.classList.add('play-button-outer')
+    let playButton = document.createElement('div')
+    playButton.classList.add('play-button')
 
-    playButton.addEventListener("click", (e) => playMusic(e, song))
+    songDiv.insertBefore(playDiv, songspan)
+    playDiv.appendChild(playButton)
+
+    playDiv.addEventListener("click", (e) => playMusic(e, song))
     
 }
 
