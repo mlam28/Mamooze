@@ -26,3 +26,15 @@
   .play-button-outer:hover .play-button {
     opacity: 1;
   }
+
+  #side-nav{
+      display: inline-block;
+      position: absolute;
+  }
+
+  div#content-container{
+      display: inline-block;
+      margin-left: 20%;
+  }
+
+ 

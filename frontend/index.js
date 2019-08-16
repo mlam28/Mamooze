@@ -42,6 +42,7 @@ function playMusic(e, song){
     audio.controls = true
     audio.autoplay = true
     audio.src = song.url
+    audio.classList.add('container-fluid')
     player.appendChild(audio)
     
 }
