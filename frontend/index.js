@@ -22,6 +22,12 @@ function displaySong(song){
     let artistspan = document.createElement('span')
     artistspan.innerText = song.artist
     songDiv.appendChild(artistspan)
+    let playButton = document.createElement('button')
+    playButton.classList.add('button')
+    playButton.classList.add('play')
+    songDiv.insertBefore(playButton, songspan)
+
+    playButton.addEventListener("click", (e) => playMusic(e, song))
     
 }
 
@@ -34,5 +40,13 @@ function playMusic(e, song){
     player.appendChild(audio)
     
 }
+
+    const form = document.querySelector('#login-form')
+    form.addEventListener('submit', loginUser)
+
+
+    function loginUser(e){
+        e.preventDefault()
+    }
 
 })

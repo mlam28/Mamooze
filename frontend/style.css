@@ -1,0 +1,10 @@
+.button.play{
+    width: 3px;
+ height: 3px;
+ border-style: solid;
+ border-width: 5px 10px 5px 10px;
+ border-color: transparent transparent transparent #202020;
+ box-sizing: border-box;
+ margin: 10px;
+}
+
