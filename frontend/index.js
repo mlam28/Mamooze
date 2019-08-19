@@ -2,15 +2,35 @@ document.addEventListener('click', documentClick, true)
 
 function documentClick(e){
     console.log('clicked on document', e.target)
-    let form = document.querySelector('.playlist-form')
-    debugger
-    if (form){
+    let form = document.querySelector('form.playlist-form')
+
+
+    let toggle = true
+
+  
+    if(e.target.nodeName === 'INPUT'){
+       
+        toggle = false
+    } else if (e.target.nodeName === 'FORM' ) {
+       
+       toggle = false
+    } else if (e.target.nodeName === 'LABEL'){
+        toggle = false
+    } else if (e.target.className === 'form-group'){
+        toggle = false
+    } else {
+        toggle = true
+    }
+    if (form && toggle) {
+        console.log(e.target)
         form.parentNode.remove()
     }
+
+    console.log(toggle)
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-    let logoutButt = document.getElementById('logout-button')
+    let logoutButt = document.getElementById('logout-button') 
     logoutButt.style.display = 'none'
     console.log('everything loaded')
 const container = document.querySelector('#content-container')
@@ -137,7 +157,7 @@ function loginUser(e){
     fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); users.forEach(user => {
         if(user.username === username) {
             displayUser(user);
-<<<<<<< HEAD
+
             currentUser = user
         } else {
             alert('that user does not exist')
@@ -153,15 +173,8 @@ function loginUser(e){
    
 
 
-=======
-        } 
-        else {
-                alert('that user does not exist')
-        }
-    })
-    })
-}
->>>>>>> d083ca020958480ae57eee8d75de520590c08dde
+
+
     function displayUser(user){
         let h2 = document.createElement('h2')
         h2.innerText = `Welcome, ${user.username}`
