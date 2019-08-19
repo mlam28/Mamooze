@@ -28,7 +28,7 @@ function displaySong(song){
     artistspan.innerText = song.artist
     songDiv.appendChild(artistspan)
     // create playDiv to wrap play button in. 
-    let playDiv = document.createElement('div')
+    let playDiv = document.createElement('div')s
     playDiv.classList.add('play-button-outer')
     let playButton = document.createElement('div')
     playButton.classList.add('play-button')
