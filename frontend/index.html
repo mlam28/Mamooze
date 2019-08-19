@@ -15,19 +15,37 @@
     </head>
     <body>
         <div id="side-things">
+            <div id="site-title">
                 <h1>Mamooze</h1>
-           
-
-            <div id='side-nav'>
-                <nav class='nav flex-column'>
-                    <p class='nav-link'>Login</p>
-                    <form id='login-form'>
-                        <input id='user-name' type='text' placeholder="username"></input>
-                        <input type='submit'></input>
-                    </form>
-                    <p class='nav-link'>Songs</p>
-                </nav>
             </div>
+
+            <ul class="nav flex-column" id='navigation'>
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#" id="login-button">Login</a>
+                      <form id='login-form'>
+                            <input id='user-name' type='text' placeholder="username"></input>
+                            <input type='submit'></input>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item"> 
+                      <a class="nav-link" href="#">Music</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                  </ul>
+
+            <!-- <div id='side-nav'>
+                <nav class='nav flex-column'>
+                    <a class='nav-link'>Login</a>
+                    
+                    <a class='nav-link'>Home</a>
+                    <a class='nav-link'>Music</a>
+                </nav>
+            </div> -->
         </div>
         <div id='content-container'>
 

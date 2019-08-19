@@ -48,6 +48,19 @@ function playMusic(e, song){
 }
 
     const form = document.querySelector('#login-form')
+    let toggle_login = false
+     let login_button = document.querySelector('#login-button')
+     form.style.display = 'none'
+     login_button.addEventListener('click', function(){
+         console.log('hit toggle')
+        toggle_login = !toggle_login
+         if (toggle_login) {
+            form.style.display = 'block' } 
+            else {
+                form.style.display = 'none'
+            }
+     })
+
     form.addEventListener('submit', loginUser)
 
 
