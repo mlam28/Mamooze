@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", function(){
     console.log('everything loaded')
 const container = document.querySelector('#content-container')
 const player = document.querySelector('#music-player')
+const playlist_button = document.querySelector('#playlist-button')
+playlist_button.style.display = 'none'
+
 const song_url = 'http://localhost:3000/songs'
 const user_url = 'http://localhost:3000/users'
 
@@ -101,6 +104,9 @@ function playMusic(e, song){
 
         let firstLi = document.querySelector('ul li')
         firstLi.appendChild(a)
+
+        let playlist_button = document.querySelector('#playlist-button')
+        playlist_button.style.display = 'block'
 
     }
 
