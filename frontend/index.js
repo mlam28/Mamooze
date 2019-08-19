@@ -3,7 +3,6 @@ document.addEventListener('click', documentClick, true)
 function documentClick(e){
     console.log('clicked on document', e.target)
     let form = document.querySelector('.playlist-form')
-    debugger
     if (form){
         form.parentNode.remove()
     }
@@ -25,6 +24,7 @@ const user_url = 'http://localhost:3000/users'
 const playlist_url = 'http://localhost:3000/playlists'
 
 fetchSongs()
+musicButton()
 
 function fetchSongs(){
     fetch(song_url).then(resp => resp.json()).then(songs => {console.log(songs); songs.forEach(displaySong)})
@@ -137,31 +137,12 @@ function loginUser(e){
     fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); users.forEach(user => {
         if(user.username === username) {
             displayUser(user);
-<<<<<<< HEAD
             currentUser = user
         } else {
             alert('that user does not exist')
         }
-
        })})
-
-        
     }
-
-
-
-   
-
-
-=======
-        } 
-        else {
-                alert('that user does not exist')
-        }
-    })
-    })
-}
->>>>>>> d083ca020958480ae57eee8d75de520590c08dde
     function displayUser(user){
         let h2 = document.createElement('h2')
         h2.innerText = `Welcome, ${user.username}`
@@ -251,7 +232,13 @@ function loginUser(e){
         })
     }
 
-
+function musicButton(){
+    const songButt = document.querySelector('.music')
+    songButt.addEventListener('click', () => {
+        content.innerHTML = '',
+        fetchSongs()
+    })
+}
 
 
 
