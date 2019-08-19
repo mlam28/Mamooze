@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function(){
 const container = document.querySelector('#content-container')
 const player = document.querySelector('#music-player')
 const song_url = 'http://localhost:3000/songs'
+const user_url = 'http://localhost:3000/users'
 
 fetchSongs()
 
@@ -66,6 +67,43 @@ function playMusic(e, song){
 
     function loginUser(e){
         e.preventDefault()
+
+       username = form.querySelector('input').value
+
+       fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); users.forEach(user => {
+        if(user.username === username) {
+            displayUser(user);
+        } else {
+            alert('that user does not exist')
+        }
+
+       })})
+
+        
     }
+
+
+    function displayUser(user){
+        let h2 = document.createElement('h2')
+        h2.innerText = `Welcome, ${user.username}`
+        let title = document.querySelector('h1')
+        title.appendChild(h2)
+
+        toggle_login = !toggle_login
+        form.style.display = 'none'
+
+        login_button.style.display = 'none'
+
+        let a = document.createElement('a')
+        a.innerText = 'Logout'
+        a.classList.add('nav-link', 'active')
+        a.id = 'logout-button'
+
+        let firstLi = document.querySelector('ul li')
+        firstLi.appendChild(a)
+
+    }
+
+
 
 })
