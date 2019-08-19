@@ -47,6 +47,11 @@
       width: 20%;
       position: absolute;
   }
+  .card {
+    display: inline-block;
+    margin-top: 30%;
+    margin-left: 1em
+  }
 
   .overlay {
     position: fixed;

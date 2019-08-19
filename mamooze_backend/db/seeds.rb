@@ -58,8 +58,10 @@ end
 
 
 summerp = Playlist.create(name: 'what time is it? summertime')
+newp = Playlist.create(name: 'Aint No laws')
 sam = User.create(name: 'Samantha Kane', username: 'sammo12')
 UserPlaylist.create(user_id: sam.id, playlist_id: summerp.id)
+newList = UserPlaylist.create(user_id: sam.id, playlist_id: newp.id)
 
 SongPlaylist.create(song_id: Song.all[2].id, playlist_id: summerp.id)
 SongPlaylist.create(song_id: Song.all[6].id, playlist_id: summerp.id)
@@ -68,3 +70,7 @@ SongPlaylist.create(song_id: Song.all[10].id, playlist_id: summerp.id)
 SongPlaylist.create(song_id: Song.all[20].id, playlist_id: summerp.id)
 SongPlaylist.create(song_id: Song.all[16].id, playlist_id: summerp.id)
 SongPlaylist.create(song_id: Song.all[28].id, playlist_id: summerp.id)
+SongPlaylist.create(song_id: Song.all[21].id, playlist_id: newp.id)
+SongPlaylist.create(song_id: Song.all[1].id, playlist_id: newp.id)
+SongPlaylist.create(song_id: Song.all[7].id, playlist_id: newp.id)
+SongPlaylist.create(song_id: Song.all[19].id, playlist_id: newp.id)
