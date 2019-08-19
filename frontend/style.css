@@ -1,5 +1,4 @@
 .play-button-outer {
-    /* margin: ; */
     display: inline-block;
     width: 2em;
     height: 1.5em;
@@ -25,7 +24,7 @@
   
   .play-button-outer:hover .play-button {
     opacity: 1;
-  }
+  }a
 
   #side-nav{
       display: inline-block;
@@ -47,6 +46,15 @@
       display: inline-block;
       width: 20%;
       position: absolute;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+   
   }
 
  

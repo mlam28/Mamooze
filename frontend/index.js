@@ -1,8 +1,21 @@
+document.addEventListener('click', documentClick, true)
+
+function documentClick(e){
+    console.log('clicked on document', e.target)
+    let form = document.querySelector('.playlist-form')
+    debugger
+    if (form){
+        form.parentNode.remove()
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function(){
     console.log('everything loaded')
 const container = document.querySelector('#content-container')
 const player = document.querySelector('#music-player')
 const playlist_button = document.querySelector('#playlist-button')
+const playlist_form = document.querySelector('#add-song-to-playlist')
+
 playlist_button.style.display = 'none'
 
 const song_url = 'http://localhost:3000/songs'
@@ -17,28 +30,73 @@ function fetchSongs(){
 
 function displaySong(song){
     let songDiv = document.createElement('div')
-    songDiv.classList.add('song-card')
+    songDiv.classList.add('song-card', 'row')
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
+    let titleDiv = document.createElement('div')
+    titleDiv.classList.add('col-sm')
+    titleDiv.appendChild(songspan)
     songspan.innerText = song.name
-    songDiv.appendChild(songspan)
+    songDiv.appendChild(titleDiv)
     songspan.addEventListener('click', (e) => playMusic(e, song))
 
+    let artistDiv = document.createElement('div')
+    artistDiv.classList.add('col-sm')
     let artistspan = document.createElement('span')
     artistspan.innerText = song.artist
-    songDiv.appendChild(artistspan)
+    artistDiv.appendChild(artistspan)
+    songDiv.appendChild(artistDiv)
     // create playDiv to wrap play button in. 
-    let playDiv = document.createElement('div')s
+    let playColDiv = document.createElement('div')
+    playColDiv.classList.add('col-sm')
+    let playDiv = document.createElement('div')
     playDiv.classList.add('play-button-outer')
+    playColDiv.appendChild(playDiv)
     let playButton = document.createElement('div')
     playButton.classList.add('play-button')
 
-    songDiv.insertBefore(playDiv, songspan)
+    songDiv.insertBefore(playColDiv, titleDiv)
     playDiv.appendChild(playButton)
 
     playDiv.addEventListener("click", (e) => playMusic(e, song))
-    
+    // create a add to playlist button for each song
+   let addToPlaylist = document.createElement('i')
+   addToPlaylist.classList.add('fa', 'fa-plus-square-o')
+   let playlistDiv = document.createElement('div')
+   playlistDiv.classList.add('col-sm')
+   playlistDiv.appendChild(addToPlaylist)
+   let playlist_form_div = document.createElement('div')
+   playlistDiv.appendChild(playlist_form_div)
+   songDiv.appendChild(playlistDiv)
+   addToPlaylist.addEventListener('click', (e) => showPlaylistForm(e, playlist_form_div))
+   
 }
+
+
+let showPlaylistForm = (e, playlist_form_div) => {
+    console.log('hit form toggle')
+    let divToDelete = document.createElement('div')
+    // let overlay = document.createElement('div')
+    // overlay.classList.add('overlay')
+    let playlist_form = document.createElement('form')
+    playlist_form.classList.add('playlist-form')
+   playlist_form.innerHTML =  "<div class='form-group'><input type='text' name='playlist-name' placeholder='Name for New Playlist'></div><div class='form-group' id='playlist-select'><label>Or, add to existing:</label></div>"
+   divToDelete.appendChild(playlist_form)
+//    divToDelete.appendChild(overlay)
+   playlist_form_div.appendChild(divToDelete)
+
+
+//     overlay.addEventListener('click', (e) =>{
+//     console.log('hit overlay')
+//     e.currentTarget.parentElement.remove()
+
+// })
+
+
+}
+
+
+
 
 function playMusic(e, song){
     player.innerHTML = ''
@@ -76,6 +134,7 @@ function playMusic(e, song){
        fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); users.forEach(user => {
         if(user.username === username) {
             displayUser(user);
+            currentUser = user
         } else {
             alert('that user does not exist')
         }
@@ -84,6 +143,10 @@ function playMusic(e, song){
 
         
     }
+
+
+
+   
 
 
     function displayUser(user){
@@ -109,6 +172,8 @@ function playMusic(e, song){
         playlist_button.style.display = 'block'
 
     }
+
+
 
 
 
