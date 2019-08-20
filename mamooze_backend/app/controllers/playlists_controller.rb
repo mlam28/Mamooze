@@ -15,10 +15,16 @@ class PlaylistsController < ApplicationController
         render json: playlist.find(params[:id])
     end
 
+    def create
+        byebug
+       playlist = Playlist.create(playlist_params)
+        render json: playlist
+    end
+
     private
 
     def playlist_params
-        params.require(:playlist).permit(:name, :image_url, :users)
+        params.permit(:name, :image_url, :users, song_ids:[], user_ids:[])
     end
 
     def playlist_serializer

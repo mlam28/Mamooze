@@ -244,8 +244,8 @@ let showPlaylistForm = (user) => {
 function managePlaylistForm(e){
 console.log('hit playlist submit')
 e.preventDefault()
-
     let songId = e.target.parentElement.parentElement.dataset.song_id
+    let userId = currentUser.id
     debugger
   let option_value = e.currentTarget.querySelector('select').value
   let new_playlist_value = e.currentTarget.querySelector('input').value
@@ -273,9 +273,16 @@ e.preventDefault()
     }).then(resp => resp.json()).then(data => console.log(data))
 
   } 
-//   else if (new_playlist_value !== "") {
-
-//   }
+  else if (new_playlist_value !== "") {
+    fetch('http://localhost:3000/playlists', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({name: new_playlist_value, song_ids: [songId], user_ids: [userId]})
+    }).then()
+  }
 }
 
 
