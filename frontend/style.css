@@ -66,4 +66,16 @@
       border: solid
   }
 
- 
+ .collab{
+   width: 200px;
+   height: 30px;
+   display: inline-block;
+ }
+#colform{
+  font-size: 19px; 
+}
+.collablist{
+  display: inline-block;
+  font-size: 12px;
+}
+

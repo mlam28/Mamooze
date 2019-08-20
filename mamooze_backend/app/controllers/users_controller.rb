@@ -15,9 +15,11 @@ class UsersController < ApplicationController
     def user_serializer_options
         {:include => {
             :playlists => {
-                :include => {:songs => {:except => [:created_at, :updated_at]}},
+                :include => {:users => {:except => [:created_at, :updated_at]}, 
+                    :songs => {:except => [:created_at, :updated_at]}},
                 :except => [:created_at, :updated_at]
             }
+
         },
         :except => [:created_at, :updated_at]
     }
