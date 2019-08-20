@@ -59,7 +59,8 @@ playlist_button.style.display = 'none'
 
 const song_url = 'http://localhost:3000/songs'
 const user_url = 'http://localhost:3000/users'
-const playlist_url = 'http://localhost:3000/playlists'
+const playlist_url = 'http://localhost:3000/playlists/'
+const user_playlist_url = 'http://localhost:3000/user_playlists/'
 
 fetchSongs()
 musicButton()
@@ -172,7 +173,6 @@ function playMusic(e, song){
 function loginUser(e){
      e.preventDefault()
        username = form.querySelector('input').value
-       debugger
     fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); 
         
        let foundUser = users.find(function(user) {
@@ -270,6 +270,7 @@ function loginUser(e){
              pImg.src = playlist.image_url
              content.innerHTML = ""
              content.append(pImg, listH3)
+             
          playlist.songs.forEach((song) => {
          displaySong(song)})
         }
@@ -277,7 +278,77 @@ function loginUser(e){
              list.style.display = 'none'               
         }
         })
+
+        let collabDiv = document.createElement('h6')
+        listH3.append(collabDiv)
+        collabDiv.innerText = 'Playlist Collaborators: '
+
+        playlist.users.forEach((user) => {
+            let collabList = document.createElement('p')
+            collabList.innerText = `${user.username}-`
+            collabList.className = 'collablist'
+            collabDiv.append(collabList)
+        })
+
+        collabForm(listH3, playlist)
     }
+    function collabForm(listH3, playlist){
+        const colForm = document.createElement('form')
+        const formInput = document.createElement('input')
+        const dataList = document.createElement('datalist')
+        const submitButt = document.createElement('input')
+        listH3.appendChild(colForm)
+        colForm.innerText = "Add a collaborator: "
+        colForm.append(formInput, dataList, submitButt)
+        colForm.id = "colform"
+        formInput.setAttribute('list', 'users')
+        formInput.setAttribute('placeholder', 'username')
+        formInput.classList.add('form-control', 'collab')
+        submitButt.type = 'submit'
+        submitButt.classList.add('btn', 'btn-primary', "btn-sm")
+        dataList.id = 'users'
+        fetch(user_url)
+        .then(resp => resp.json())
+        .then(users => { users.forEach((user) => {
+            let option = document.createElement('option')
+            dataList.append(option)
+            if(username !== user.username){ 
+                option.value = user.username
+                option.dataset.id = user.id
+            }
+        })
+        })
+
+
+   colForm.addEventListener('submit', (e) => {addCollab(e, playlist)})
+    }
+
+function addCollab(e, playlist){
+    e.preventDefault()
+    let options = e.target.querySelector('datalist').children
+    let optionsarray = Array.from(options)
+    let foundOpt = optionsarray.find(function(option)
+    {return option.value === e.target[0].value})
+    
+    let data = {user_id: foundOpt.dataset.id,
+        playlist_id: playlist.id
+    }
+    fetch(user_playlist_url, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => res.json())
+    .then(newUser => {
+        debugger
+        console.log(newUser.user_id)
+    })
+
+}
+
+
 
 function musicButton(){
     const songButt = document.querySelector('.music')
