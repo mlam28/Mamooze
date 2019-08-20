@@ -7,26 +7,43 @@ function documentClick(e){
 
     let toggle = true
 
-  
-    if(e.target.nodeName === 'INPUT'){
-       
+  let nodes = parentNodes(e.target)
+
+  nodes.forEach(node => {
+    if (node.nodeName === 'FORM'){
         toggle = false
-    } else if (e.target.nodeName === 'FORM' ) {
-       
-       toggle = false
-    } else if (e.target.nodeName === 'LABEL'){
-        toggle = false
-    } else if (e.target.className === 'form-group'){
-        toggle = false
-    } else {
-        toggle = true
     }
+  })
+    // if(e.target.nodeName === 'INPUT'){
+       
+    //     toggle = false
+    // } else if (e.target.nodeName === 'FORM' ) {
+       
+    //    toggle = false
+    // } else if (e.target.nodeName === 'LABEL'){
+    //     toggle = false
+    // } else if (e.target.className === 'form-group'){
+    //     toggle = false
+    // } else {
+    //     toggle = true
+    // }
     if (form && toggle) {
         console.log(e.target)
         form.parentNode.remove()
     }
 
     console.log(toggle)
+}
+
+function parentNodes(e){
+    let nodes = []
+    nodes.push(e)
+    while (e.parentNode){
+        nodes.unshift(e.parentNode);
+        e = e.parentNode
+    }
+
+    return nodes
 }
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -155,14 +172,20 @@ function playMusic(e, song){
 function loginUser(e){
      e.preventDefault()
        username = form.querySelector('input').value
-    fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); users.forEach(user => {
-        if(user.username === username) {
-            displayUser(user);
-            currentUser = user
-        } else {
-            alert('that user does not exist')
-        }
-       })})
+       debugger
+    fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); 
+        
+       let foundUser = users.find(function(user) {
+        return user.username === username
+    });
+
+   if (foundUser){
+    displayUser(foundUser)
+   } else {
+    alert('that user does not exist.')
+   }
+
+})
     }
 
 

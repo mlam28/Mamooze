@@ -60,8 +60,10 @@ end
 summerp = Playlist.create(name: 'what time is it? summertime')
 newp = Playlist.create(name: 'Aint No laws')
 sam = User.create(name: 'Samantha Kane', username: 'sammo12')
+michelle = User.create(name: 'Michelle', username: 'shelly05')
 UserPlaylist.create(user_id: sam.id, playlist_id: summerp.id)
 newList = UserPlaylist.create(user_id: sam.id, playlist_id: newp.id)
+
 
 SongPlaylist.create(song_id: Song.all[2].id, playlist_id: summerp.id)
 SongPlaylist.create(song_id: Song.all[6].id, playlist_id: summerp.id)
