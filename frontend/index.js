@@ -46,7 +46,23 @@ function parentNodes(e){
     return nodes
 }
 
+// end of checking if you are clicking on somewhere that is not part of a form in order to close the form. ////////
+
+function getSongsArray(){
+    let songsArray = []
+    let songs = document.getElementsByClassName('song-card')
+    Array.from(songs).forEach(song => {
+        let obj = {}
+        obj.name = song.dataset.song_name
+        obj.artist = song.dataset.song_artist
+        obj.url = song.dataset.song_url
+        songsArray.push(obj)
+    })
+    return songsArray
+   }
+
 document.addEventListener("DOMContentLoaded", function(){
+    currentUser = 0
     let logoutButt = document.getElementById('logout-button') 
     logoutButt.style.display = 'none'
     console.log('everything loaded')
@@ -64,6 +80,27 @@ const playlist_url = 'http://localhost:3000/playlists'
 fetchSongs()
 musicButton()
 
+function loginUser(e){
+     e.preventDefault()
+       username = form.querySelector('input').value
+       
+    fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); 
+        
+       let foundUser = users.find(function(user) {
+        return user.username === username
+    });
+
+   if (foundUser){
+    displayUser(foundUser);
+    currentUser = foundUser
+   } else {
+    alert('that user does not exist.')
+   }
+
+})
+    }
+
+
 function fetchSongs(){
     fetch(song_url).then(resp => resp.json()).then(songs => {console.log(songs); songs.forEach(displaySong)})
 }
@@ -72,6 +109,9 @@ function fetchSongs(){
 function displaySong(song){
     let songDiv = document.createElement('div')
     songDiv.classList.add('song-card', 'row')
+    songDiv.dataset.song_url = song.url
+    songDiv.dataset.song_name = song.name
+    songDiv.dataset.song_artist = song.artist
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
     let titleDiv = document.createElement('div')
@@ -109,36 +149,27 @@ function displaySong(song){
    playlistDiv.classList.add('col-sm')
    playlistDiv.appendChild(addToPlaylist)
    let playlist_form_div = document.createElement('div')
+   playlist_form_div.dataset.song_id = song.id
    playlistDiv.appendChild(playlist_form_div)
-   songDiv.appendChild(playlistDiv)
-   addToPlaylist.addEventListener('click', (e) => showPlaylistForm(e, playlist_form_div))
    
+   songDiv.appendChild(playlistDiv)
+   if (currentUser !== 0){
+   addToPlaylist.addEventListener('click', (e) => fetchFormPlaylist(e, playlist_form_div) )
+   }
 }
 
-
-let showPlaylistForm = (e, playlist_form_div) => {
-    console.log('hit form toggle')
-    let divToDelete = document.createElement('div')
-    // let overlay = document.createElement('div')
-    // overlay.classList.add('overlay')
-    let playlist_form = document.createElement('form')
-    playlist_form.classList.add('playlist-form')
-   playlist_form.innerHTML =  "<div class='form-group'><input type='text' name='playlist-name' placeholder='Name for New Playlist'></div><div class='form-group' id='playlist-select'><label>Or, add to existing:</label></div>"
-   divToDelete.appendChild(playlist_form)
-//    divToDelete.appendChild(overlay)
-   playlist_form_div.appendChild(divToDelete)
-
-
-//     overlay.addEventListener('click', (e) =>{
-//     console.log('hit overlay')
-//     e.currentTarget.parentElement.remove()
-
-// })
-
-
-}
-
-
+// function getSongsArray(){
+//  let songsArray = []
+//  let songs = document.getElementsByClassName('song-card')
+//  Array.from(songs).forEach(song => {
+//      let obj = {}
+//      obj.name = song.dataset.song_name
+//      obj.artist = song.dataset.song_artist
+//      obj.url = song.dataset.song_url
+//      songsArray.push(obj)
+//  })
+//  return songsArray
+// }
 
 
 function playMusic(e, song){
@@ -147,10 +178,106 @@ function playMusic(e, song){
     audio.controls = true
     audio.autoplay = true
     audio.src = song.url
-    audio.classList.add('container-fluid', 'fixed-bottom')
+    audio.classList.add('container-fluid')
+    player.classList.add('fixed-bottom')
     player.appendChild(audio)
     
+    let songs = getSongsArray()
+    
+    audio.addEventListener('ended', (e) => nextSong(e, songs))
+    
 }
+
+function nextSong(e, songs){
+    console.log('ended')
+
+    let song_obj = songs.find(function(obj){
+        return obj.url === e.target.src
+    })
+    let song_index = songs.indexOf(song_obj) 
+    e.target.src = songs[song_index += 1].url
+    
+}
+
+// (e) => showPlaylistForm(e, playlist_form_div)
+
+function fetchFormPlaylist(e, playlist_form_div){
+    let username = document.querySelector('#user').dataset.user_name
+    fetch(user_url).then(resp => resp.json()).then(users => {console.log(users);
+       
+        currentUser = users.find(function(user){
+            return user.username === username
+        });
+        showPlaylistForm(currentUser)
+    })
+    playlist_form_div.id = 'clicked'
+}
+
+let showPlaylistForm = (user) => {
+    console.log('hit form toggle')
+    let divToDelete = document.createElement('div')
+
+    let playlist_form = document.createElement('form')
+    playlist_form.classList.add('playlist-form')
+   playlist_form.innerHTML =  "<div class='form-group'><input type='text' name='playlist-name' placeholder='Name for New Playlist'></div><div class='form-group' id='playlist-select'><label>Or, add to existing:</label><select><option disabled selected value>--- select an option ---</option></select></div><input type='submit'>"
+
+   
+    user.playlists.forEach(playlist => {
+    let selectTag = playlist_form.querySelector('select')
+    let optionTag = document.createElement('option')
+    optionTag.value = playlist.id
+    optionTag.innerText = playlist.name
+    selectTag.appendChild(optionTag)
+   })
+
+   
+   divToDelete.appendChild(playlist_form)
+   let playlist_form_div = document.querySelector('#clicked')
+   playlist_form_div.appendChild(divToDelete)
+  
+   playlist_form.addEventListener('submit', managePlaylistForm)
+
+}
+
+
+function managePlaylistForm(e){
+console.log('hit playlist submit')
+e.preventDefault()
+
+    let songId = e.target.parentElement.parentElement.dataset.song_id
+    debugger
+  let option_value = e.currentTarget.querySelector('select').value
+  let new_playlist_value = e.currentTarget.querySelector('input').value
+
+        function checkFull(){
+        return (option_value !== "") && (new_playlist_value !== "")
+        }
+
+        function checkEmpty(){
+        return  (option_value === "") && (new_playlist_value === "")
+        }
+
+    debugger
+
+  if(checkFull() || checkEmpty()){
+      alert('Please fill in one or the other, but not both.')
+  } else if (option_value !== "") {
+    fetch('http://localhost:3000/song_playlists', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({song_id: songId , playlist_id: option_value})
+    }).then(resp => resp.json()).then(data => console.log(data))
+
+  } 
+//   else if (new_playlist_value !== "") {
+
+//   }
+}
+
+
 
     const form = document.querySelector('#login-form')
     let toggle_login = false
@@ -169,30 +296,14 @@ function playMusic(e, song){
     form.addEventListener('submit', loginUser)
 
 
-function loginUser(e){
-     e.preventDefault()
-       username = form.querySelector('input').value
-       debugger
-    fetch(user_url).then(resp => resp.json()).then(users => {console.log(users); 
-        
-       let foundUser = users.find(function(user) {
-        return user.username === username
-    });
-
-   if (foundUser){
-    displayUser(foundUser)
-   } else {
-    alert('that user does not exist.')
-   }
-
-})
-    }
 
 
     
     function displayUser(user){
         let h2 = document.createElement('h2')
+        h2.id = 'user'
         h2.innerText = `Welcome, ${user.username}`
+        h2.dataset.user_name = user.username
         let title = document.querySelector('h1')
         title.appendChild(h2)
 
@@ -225,6 +336,7 @@ function loginUser(e){
             playlist_button.style.display = 'none'
             login_button.style.display = 'block'
             form[0].value = ''
+            currentUser = 0
             fetchSongs()  
     }
 
@@ -292,3 +404,6 @@ function musicButton(){
 
 
 })
+
+// end of DOMCONTENTLOADED
+
