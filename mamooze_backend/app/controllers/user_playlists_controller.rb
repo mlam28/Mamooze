@@ -5,8 +5,14 @@ class UserPlaylistsController < ApplicationController
     end
 
     def create
-        userplay = UserPlaylist.create(up_params)
-        render json: userplay.to_json
+        userplay = UserPlaylist.find_by(up_params)
+
+        if userplay 
+        render json: {message: "user already collaborating"}
+        else
+           userp =  UserPlaylist.create(up_params)
+            render json: userp.to_json
+        end
     end
 
 private

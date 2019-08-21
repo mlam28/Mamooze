@@ -391,14 +391,16 @@ e.preventDefault()
         })
 
         let collabDiv = document.createElement('h6')
+        collabDiv.className = "h6Div"
         listH3.append(collabDiv)
         collabDiv.innerText = 'Playlist Collaborators: '
 
         playlist.users.forEach((user) => {
             let collabList = document.createElement('p')
+            if(user.username !== username){
             collabList.innerText = `${user.username}-`
             collabList.className = 'collablist'
-            collabDiv.append(collabList)
+            collabDiv.append(collabList)}
         })
 
         collabForm(listH3, playlist)
@@ -418,16 +420,25 @@ e.preventDefault()
         submitButt.type = 'submit'
         submitButt.classList.add('btn', 'btn-primary', "btn-sm")
         dataList.id = 'users'
+        
         fetch(user_url)
         .then(resp => resp.json())
-        .then(users => { users.forEach((user) => {
-            let option = document.createElement('option')
+        .then((users) => { 
+            // const newplaylist = playlist
+            users.forEach((user) => {
+             let option = document.createElement('option')
             dataList.append(option)
             if(username !== user.username){ 
                 option.value = user.username
                 option.dataset.id = user.id
             }
         })
+        //   newplaylist.users.forEach((user) =>{
+        //         if(!user.username){
+        //             option.value = user.username
+        //             option.dataset.id = user.id
+        //         }
+        //     })
         })
 
 
@@ -440,7 +451,6 @@ function addCollab(e, playlist){
     let optionsarray = Array.from(options)
     let foundOpt = optionsarray.find(function(option)
     {return option.value === e.target[0].value})
-    
     let data = {user_id: foundOpt.dataset.id,
         playlist_id: playlist.id
     }
@@ -454,9 +464,17 @@ function addCollab(e, playlist){
     .then(res => res.json())
     .then(newUser => {
         debugger
-        console.log(newUser.user_id)
-    })
-
+        console.log(newUser)
+        if (newUser.message){
+            alert(newUser.message)
+            document.querySelector('#colform')[0].value = ''
+        }
+debugger
+            let collabList = document.createElement('p')
+            collabList.innerText = e.target[0].value
+            collabList.className = 'collablist'
+            document.querySelector(".h6Div").append(collabList)}
+        )
 }
 
 
