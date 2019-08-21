@@ -14,6 +14,8 @@ Playlist.destroy_all
 UserPlaylist.destroy_all
 SongPlaylist.destroy_all
 User.destroy_all
+PublicPlaylist.destroy_all
+SongPublicPlaylist.destroy_all
 
 class GetSongs
 
@@ -62,7 +64,7 @@ end
 
     backstreet_songs = JSON.parse(GetSongs.new.get_songs(millenium_id))
     puts backstreet_songs
-byebug
+
     backstreet_list = backstreet_songs['tracks']['data'].collect do |song|
         {name: song['title'], artist: 'Backstreet Boys', url: song['preview'], cover_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Millennium_cover.jpg/220px-Millennium_cover.jpg'}
     end
@@ -101,6 +103,26 @@ SongPlaylist.create(song_id: Song.all[18].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[13].id, playlist_id: year.id)
 
 guilty = PublicPlaylist.create(name: 'Guilty Pleasures')
-SongPublicPlaylist.create(song_id: Song.all[29], public_playlist_id: guilty.id)
-SongPublicPlaylist.create(song_id: Song.all[35], public_playlist_id: guilty.id)
-SongPublicPlaylist.create(song_id: Song.all[34], public_playlist_id: guilty.id)
+pump = PublicPlaylist.create(name: "Pump Up")
+master = PublicPlaylist.create(name: 'Master Mix')
+SongPublicPlaylist.create(song_id: Song.all[29].id, public_playlist_id: guilty.id)
+SongPublicPlaylist.create(song_id: Song.all[34].id, public_playlist_id: guilty.id)
+SongPublicPlaylist.create(song_id: Song.all[35].id, public_playlist_id: guilty.id)
+SongPublicPlaylist.create(song_id: Song.all[33].id, public_playlist_id: pump.id)
+SongPublicPlaylist.create(song_id: Song.all[24].id, public_playlist_id: pump.id)
+SongPublicPlaylist.create(song_id: Song.all[15].id, public_playlist_id: pump.id)
+SongPublicPlaylist.create(song_id: Song.all[20].id, public_playlist_id: pump.id)
+SongPublicPlaylist.create(song_id: Song.all[14].id, public_playlist_id: pump.id)
+SongPublicPlaylist.create(song_id: Song.all[4].id, public_playlist_id: pump.id)
+SongPublicPlaylist.create(song_id: Song.all[24].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[2].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[13].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[22].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[25].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[3].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[6].id, public_playlist_id: master.id)
+SongPublicPlaylist.create(song_id: Song.all[9].id, public_playlist_id: master.id).id
+SongPublicPlaylist.create(song_id: Song.all[11].id, public_playlist_id: master.id)
+
+
+

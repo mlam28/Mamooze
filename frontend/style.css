@@ -110,7 +110,16 @@ audio{
 .music-card{
   width: 18em;
 }
+<<<<<<< HEAD
 
 .card-body{
   pointer-events: all
 }
+=======
+.ph{
+  display: inline;
+}
+h2{
+  text-align: center;
+}
+>>>>>>> 985ad82ecdb918674461b94ef135e0d458b88195

@@ -1,4 +1,9 @@
 document.addEventListener('click', documentClick, true)
+let headerCont = document.getElementById('head-container')
+let headH2 = document.createElement('h2')
+headH2.innerText = "All Songs"
+headH2.className = 'head'
+headerCont.appendChild(headH2)
 
 function documentClick(e){
     console.log('clicked on document', e.target)
@@ -75,8 +80,12 @@ const container = document.querySelector('#content-container')
 const player = document.querySelector('#music-player')
 const playlist_button = document.querySelector('#playlist-button')
 const playlist_form = document.querySelector('#add-song-to-playlist')
+const homeButt = document.querySelector('.home')
+const songsButt = document.querySelector('.music')
 
 playlist_button.style.display = 'none'
+homeButt.style.display = 'none'
+songsButt.style.display = 'none'
 
 const song_url = 'http://localhost:3000/songs'
 const user_url = 'http://localhost:3000/users'
@@ -115,6 +124,7 @@ function fetchSongs(){
 
 
 function displaySong(song){
+
     let songDiv = document.createElement('div')
     songDiv.classList.add('song-card', 'row')
     songDiv.dataset.song_url = song.url
@@ -423,8 +433,11 @@ e.preventDefault()
         login_button.style.display = 'none'
         logoutButt.style.display = 'block'
 
+
         let playlist_button = document.querySelector('#playlist-button')
         playlist_button.style.display = 'block'
+        homeButt.style.display = 'block'
+        songsButt.style.display = 'block'
         playlist_button.addEventListener("click", (e) => {fetchUser(e, user_id)})
 
        displayPage(user)
@@ -445,6 +458,7 @@ e.preventDefault()
         let navH2 = document.querySelector('h2')
             navH2.remove()
             content.innerHTML ='', 
+            headerCont.innerHTML = ''
             form.style.display = 'block'
             e.target.style.display = 'none'
             playlist_button.style.display = 'none'
@@ -452,6 +466,10 @@ e.preventDefault()
             form[0].value = ''
             currentUser = 0
             fetchSongs()  
+            let headH2 = document.createElement('h2')
+            headH2.innerText = "All Songs"
+            headH2.className = 'head'
+            headerCont.appendChild(headH2)
     }
 
     function displayPage(user){
@@ -464,6 +482,10 @@ e.preventDefault()
 
     function displayPlaylists(user){
         content.innerHTML = ""
+        headerCont.innerHTML = ""
+        let phead = document.createElement('h2')
+        phead.innerText = "My Playlists"
+        headerCont.appendChild(phead)
          user.playlists.forEach((playlist) => {
            let playlistDiv = document.createElement('div')
            playlistDiv.className ='card'
@@ -497,6 +519,9 @@ e.preventDefault()
             let pImg = document.createElement('img') 
              pImg.src = playlist.image_url
              content.innerHTML = ""
+             headerCont.innerHTML = ''
+             plistHead = document.createElement('h2')
+             plistHead.innerText = playlist.name
              content.append(pImg, listH3)
              
          playlist.songs.forEach((song) => {
@@ -602,11 +627,80 @@ function musicButton(){
     const songButt = document.querySelector('.music')
     songButt.addEventListener('click', () => {
         content.innerHTML = '',
+        headerCont.innerHTML = ''
         fetchSongs()
+        let headH2 = document.createElement('h2')
+        headH2.innerText = "All Songs"
+        headH2.className = 'head'
+        headerCont.appendChild(headH2)
     })
 }
 
+let homeButton = document.querySelector('.home')
+    homeButton.addEventListener("click", renderHome)
 
+    function renderHome(){
+        content.innerHTML = ""
+        headerCont.innerHTML = ''
+        let publicHead = document.createElement('h2')
+        publicHead.innerText = "Public Playlists"
+        headerCont.appendChild(publicHead)
+        fetch('http://localhost:3000/public_playlists')
+        .then(res => res.json())
+        .then((playlists) => {
+            debugger
+            playlists.forEach((playlist) => {
+                console.log(playlist)
+                debugger
+            let playlistDiv = document.createElement('div')
+           playlistDiv.className ='card'
+           let playlistImg = document.createElement('img') 
+           playlistImg.src = playlist.image_url
+           playlistImg.className = 'car-img-top'
+           let cardBodyDiv = document.createElement('div')
+           cardBodyDiv.className = ('card-body')
+           let cardText = document.createElement('p')
+           cardBodyDiv.appendChild(cardText)
+            cardText.innerText = playlist.name
+           content.appendChild(playlistDiv)
+           playlistDiv.append(playlistImg, cardBodyDiv)
+           
+           playlistImg.addEventListener('click', (e) => {showPublicPlaylistSongs(e, playlist)}, {once : true});
+           cardText.addEventListener('click', (e) => {showPublicPlaylistSongs(e, playlist)}, {once : true});
+            })
+        })
+
+}
+
+
+function showPublicPlaylistSongs(e, playlist){
+    let listDiv = document.createElement('div')
+    let listH4 = document.createElement('h4')
+    listH4.dataset.id = playlist.id
+    listH4.innerText = playlist.name
+    listDiv.appendChild(listH4)
+    let plist = document.querySelectorAll('.card-body')
+    debugger
+ plist.forEach((list) => {
+    if (list.innerText === playlist.name){
+        let pImg = document.createElement('img') 
+         pImg.src = playlist.image_url
+         content.innerHTML = ""
+         content.append(pImg, listH4)
+         headerCont.innerHTML = ''
+        let publicHead = document.createElement('h2')
+        publicHead.innerText = "Public Playlists"
+        headerCont.appendChild(publicHead)
+    //   debugger   
+     playlist.songs.forEach((song) => {
+     displaySong(song)})
+     
+    }
+    else{      
+         list.style.display = 'none'               
+    }
+    })
+}
 
 
 
