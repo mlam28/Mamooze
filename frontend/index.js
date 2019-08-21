@@ -469,18 +469,18 @@ function addCollab(e, playlist){
     })
     .then(res => res.json())
     .then(newUser => {
-        debugger
         console.log(newUser)
         if (newUser.message){
             alert(newUser.message)
             document.querySelector('#colform')[0].value = ''
         }
-debugger
             let collabList = document.createElement('p')
-            collabList.innerText = e.target[0].value
+            collabList.innerText = `${e.target[0].value}-`
             collabList.className = 'collablist'
-            document.querySelector(".h6Div").append(collabList)}
-        )
+            document.querySelector(".h6Div").append(collabList)
+            document.querySelector('#colform')[0].value = ''
+        
+})
 }
 
 
