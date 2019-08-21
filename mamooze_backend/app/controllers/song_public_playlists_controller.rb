@@ -1,0 +1,2 @@
+class SongPublicPlaylistsController < ApplicationController
+end

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :song_public_playlists
+  resources :public_playlists
   resources :song_playlists
   resources :user_playlists
   resources :songs

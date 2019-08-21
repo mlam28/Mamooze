@@ -59,6 +59,7 @@ function getSongsArray(){
         obj.name = song.dataset.song_name
         obj.artist = song.dataset.song_artist
         obj.url = song.dataset.song_url
+        obj.song_cover = song.dataset.song_cover
         songsArray.push(obj)
     })
     return songsArray
@@ -116,6 +117,7 @@ function displaySong(song){
     songDiv.dataset.song_url = song.url
     songDiv.dataset.song_name = song.name
     songDiv.dataset.song_artist = song.artist
+    songDiv.dataset.song_cover = song.cover_url
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
     let titleDiv = document.createElement('div')
@@ -173,7 +175,23 @@ function playMusic(e, song){
     audio.classList.add('container-fluid')
     player.classList.add('fixed-bottom')
     player.appendChild(audio)
-    
+
+    // create card next to audio 
+    let cardDiv = document.createElement('div')
+    cardDiv.classList.add('card', 'music-card')
+
+    let songImg = document.createElement('img')
+    songImg.src = song.cover_url
+    songImg.classList.add('car-img-top', "cover-image")
+    cardDiv.appendChild(songImg)
+    let cardBodyDiv = document.createElement('div')
+    cardBodyDiv.classList.add('card-body')
+    cardDiv.appendChild(cardBodyDiv)
+
+    let cardTitle = document.createElement('h5')
+    cardTitle.innerText = `${song.name} / ${song.artist}`
+    cardBodyDiv.appendChild(cardTitle)
+    player.insertBefore(cardDiv, audio)
     let songs = getSongsArray()
     
     audio.addEventListener('ended', (e) => nextSong(e, songs))
@@ -187,8 +205,13 @@ function nextSong(e, songs){
         return obj.url === e.target.src
     })
     let song_index = songs.indexOf(song_obj) 
+    debugger
     e.target.src = songs[song_index += 1].url
-    
+    debugger
+   let cardDiv = e.target.parentElement.children[0]
+   cardDiv.querySelector('img').src = songs[song_index].song_cover
+   cardDiv.querySelector('div h5').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
+    debugger
 }
 
 // (e) => showPlaylistForm(e, playlist_form_div)

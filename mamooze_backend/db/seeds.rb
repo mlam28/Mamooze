@@ -34,7 +34,8 @@ end
 
 
     jobros_list = jobros_songs['tracks']['data'].collect do |song|
-        {name: song['title'], artist: 'Jonas Brothers', url: song['preview']}
+        
+        {name: song['title'], artist: 'Jonas Brothers', url: song['preview'], cover_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Lines%2C_Vines_and_Trying_Times_album_cover.jpg/220px-Lines%2C_Vines_and_Trying_Times_album_cover.jpg'}
     end
 
 
@@ -46,16 +47,29 @@ end
     one_direction_id = '9146145'
 
     one_d_songs = JSON.parse(GetSongs.new.get_songs(one_direction_id))
-    puts one_d_songs
+   
 
     one_d_list = one_d_songs['tracks']['data'].collect do |song|
-        {name: song['title'], artist: 'One Direction', url: song['preview']}
+        {name: song['title'], artist: 'One Direction', url: song['preview'], cover_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/One_Direction_-_Four.png/220px-One_Direction_-_Four.png'}
     end
 
     one_d_list.each do |song|
         Song.create(song)
     end
 
+# adding more songs
+    millenium_id = '1205922'
+
+    backstreet_songs = JSON.parse(GetSongs.new.get_songs(millenium_id))
+    puts backstreet_songs
+byebug
+    backstreet_list = backstreet_songs['tracks']['data'].collect do |song|
+        {name: song['title'], artist: 'Backstreet Boys', url: song['preview'], cover_url: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Millennium_cover.jpg/220px-Millennium_cover.jpg'}
+    end
+
+    backstreet_list.each do |song|
+        Song.create(song)
+    end
 
 summerp = Playlist.create(name: 'what time is it? summertime')
 newp = Playlist.create(name: 'Aint No laws')
@@ -85,3 +99,8 @@ SongPlaylist.create(song_id: Song.all[12].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[25].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[18].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[13].id, playlist_id: year.id)
+
+guilty = PublicPlaylist.create(name: 'Guilty Pleasures')
+SongPublicPlaylist.create(song_id: Song.all[29], public_playlist_id: guilty.id)
+SongPublicPlaylist.create(song_id: Song.all[35], public_playlist_id: guilty.id)
+SongPublicPlaylist.create(song_id: Song.all[34], public_playlist_id: guilty.id)

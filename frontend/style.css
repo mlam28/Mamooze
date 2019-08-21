@@ -79,3 +79,15 @@
   font-size: 12px;
 }
 
+
+#music-player{
+  pointer-events: none;
+}
+
+audio{
+  pointer-events: all
+}
+
+.music-card{
+  width: 18em;
+}
