@@ -81,6 +81,7 @@ const song_url = 'http://localhost:3000/songs'
 const user_url = 'http://localhost:3000/users'
 const playlist_url = 'http://localhost:3000/playlists/'
 const user_playlist_url = 'http://localhost:3000/user_playlists/'
+const song_playlist_url = 'http://localhost:3000/song_playlists/'
 
 fetchSongs()
 musicButton()
@@ -100,6 +101,7 @@ function loginUser(e){
     currentUser = foundUser
    } else {
     alert('that user does not exist.')
+    document.querySelector("#login-form")[0].value = ''
    }
 
 })
@@ -115,7 +117,7 @@ function displaySong(song){
     let songDiv = document.createElement('div')
     songDiv.classList.add('song-card', 'row')
     songDiv.dataset.song_url = song.url
-    songDiv.dataset.song_name = song.name
+    songDiv.id = song.name
     songDiv.dataset.song_artist = song.artist
     songDiv.dataset.song_cover = song.cover_url
     container.appendChild(songDiv)
@@ -162,7 +164,43 @@ function displaySong(song){
    if (currentUser !== 0){
    addToPlaylist.addEventListener('click', (e) => fetchFormPlaylist(e, playlist_form_div) )
    }
+   // delete button
+let pH3 = document.querySelector('h3')
+if(!!currentUser && !!pH3){
+       let deleteIcon = document.createElement('i')
+       let deleteDiv = document.createElement('div')
+       deleteDiv.className = 'col-sm'
+        deleteIcon.classList.add('far', 'fa-trash-alt')
+        songDiv.appendChild(deleteDiv)
+       deleteDiv.appendChild(deleteIcon)
+       deleteDiv.dataset.song_id = song.id
+
+       deleteIcon.addEventListener("click", (e) => deleteSong(e, songDiv))
 }
+}
+
+function deleteSong(e, songDiv){
+    let data = {
+        song_id: e.target.parentElement.dataset.song_id,
+        // songDiv.children[4].dataset.song_id
+        playlist_id: songDiv.parentElement.children[1].dataset.id
+    }
+        fetch('http://localhost:3000/song_playlists' , {
+         method: 'DELETE',
+         body: JSON.stringify(data),
+         headers: {
+             'Content-Type': 'application/JSON'
+            }
+         })
+         .then(res => res.json())
+         .then( (bye) => {
+            alert(bye.message)
+         }
+         )
+          document.getElementById(songDiv.id).remove()
+        }
+         
+         
 
 
 
@@ -401,6 +439,7 @@ e.preventDefault()
  function showPlaylistSongs(e, playlist){
         let listDiv = document.createElement('div')
         let listH3 = document.createElement('h3')
+        listH3.dataset.id = playlist.id
         listH3.innerText = playlist.name
         listDiv.appendChild(listH3)
         let plist = document.querySelectorAll('.card-body')
@@ -413,6 +452,7 @@ e.preventDefault()
              
          playlist.songs.forEach((song) => {
          displaySong(song)})
+         
         }
         else{      
              list.style.display = 'none'               
