@@ -61,7 +61,6 @@ function getSongsArray(){
     let songs = document.getElementsByClassName('song-card')
     Array.from(songs).forEach(song => {
         let obj = {}
-        
         obj.name = song.dataset.song_name
         obj.artist = song.dataset.song_artist
         obj.url = song.dataset.song_url
@@ -131,7 +130,7 @@ function displaySong(song){
     songDiv.id = song.name
     songDiv.dataset.song_artist = song.artist
     songDiv.dataset.song_cover = song.cover_url
-    songDiv.dataset.song_name = song.name
+    debugger
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
     let titleDiv = document.createElement('div')
@@ -233,7 +232,6 @@ function playMusic(e, song){
     let songImg = document.createElement('img')
     songImg.src = song.cover_url
     songImg.classList.add('car-img-top', "cover-image")
-    songImg.id = 'music-player-image'
     cardDiv.appendChild(songImg)
     let cardBodyDiv = document.createElement('div')
     cardBodyDiv.classList.add('card-body')
@@ -242,72 +240,27 @@ function playMusic(e, song){
     let cardTitle = document.createElement('h5')
     cardTitle.innerText = `${song.name} / ${song.artist}`
     cardBodyDiv.appendChild(cardTitle)
-
-    let forward = document.createElement('i')
-    forward.classList.add('fa', 'fa-step-forward')
-    
-    let backward = document.createElement('i')
-    backward.classList.add('fa', 'fa-step-backward')
-    cardBodyDiv.appendChild(backward)
-    cardBodyDiv.appendChild(forward)
-
     player.insertBefore(cardDiv, audio)
-
     let songs = getSongsArray()
-    forward.addEventListener('click', (e) => forwardSong(e, songs))
-    backward.addEventListener('click', (e) => backwardSong(e, songs))
+    
     audio.addEventListener('ended', (e) => nextSong(e, songs))
     
 }
 
 function nextSong(e, songs){
     console.log('ended')
-    
+
     let song_obj = songs.find(function(obj){
         return obj.url === e.target.src
     })
     let song_index = songs.indexOf(song_obj) 
-    
+    debugger
     e.target.src = songs[song_index += 1].url
-    
+    debugger
    let cardDiv = e.target.parentElement.children[0]
    cardDiv.querySelector('img').src = songs[song_index].song_cover
    cardDiv.querySelector('div h5').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
-    
-}
-
-function backwardSong(e, songs){
-    console.log('go back please')
-    
-    let audio = document.querySelector('audio')
-    let song_obj = songs.find(function(obj){
-        return obj.url === audio.src
-    })
-    let song_index = songs.indexOf(song_obj) 
-    
-    audio.src = songs[song_index -= 1].url
-    
-   let cardDiv = e.target.parentElement.children[0]
-   document.querySelector('#music-player-image').src = songs[song_index].song_cover
-   
-   document.querySelector('h5').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
-}
-
-function forwardSong(e, songs){
-    console.log('next song please')
-    
-    let audio = document.querySelector('audio')
-    let song_obj = songs.find(function(obj){
-        return obj.url === audio.src
-    })
-    let song_index = songs.indexOf(song_obj) 
-    
-    audio.src = songs[song_index += 1].url
-    
-   let cardDiv = e.target.parentElement.children[0]
-   document.querySelector('#music-player-image').src = songs[song_index].song_cover
-   
-   document.querySelector('h5').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
+    debugger
 }
 
 // (e) => showPlaylistForm(e, playlist_form_div)
@@ -372,7 +325,7 @@ e.preventDefault()
   if(checkFull() || checkEmpty()){
       alert('Please fill in one or the other, but not both.')
       selectTag.value = ''
-      
+      debugger
   } else if (option_value !== "") {
     fetch('http://localhost:3000/song_playlists', {
         method: 'POST',
@@ -441,7 +394,8 @@ e.preventDefault()
         playlist_button.addEventListener("click", (e) => {fetchUser(e, user_id)})
 
        displayPage(user)
-       displayPlaylists(user)
+       renderHome()
+    //    displayPlaylists(user)
 
        logoutButt.addEventListener('click', logout)
      
@@ -493,7 +447,7 @@ e.preventDefault()
            playlistImg.src = playlist.image_url
            playlistImg.className = 'car-img-top'
            let cardBodyDiv = document.createElement('div')
-           cardBodyDiv.className = ('card-body', 'playlist-card')
+           cardBodyDiv.className = ('card-body')
            let cardText = document.createElement('p')
            cardBodyDiv.appendChild(cardText)
             cardText.innerText = playlist.name
@@ -512,8 +466,7 @@ e.preventDefault()
         listH3.dataset.id = playlist.id
         listH3.innerText = playlist.name
         listDiv.appendChild(listH3)
-        let plist = document.querySelectorAll('.playlist-card')
-        
+        let plist = document.querySelectorAll('.card-body')
      plist.forEach((list) => {
         if (list.innerText === playlist.name){
             let pImg = document.createElement('img') 
@@ -529,8 +482,7 @@ e.preventDefault()
          
         }
         else{      
-             list.style.display = 'none'     
-                       
+             list.style.display = 'none'               
         }
         })
 
