@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :song_playlists
+  resources :song_playlists, only: [:index, :create, :show, :update]
+  delete '/song_playlists', to: 'song_playlists#destroy'
   resources :user_playlists
   resources :songs
   resources :playlists

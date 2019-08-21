@@ -9,6 +9,11 @@ class SongPlaylistsController < ApplicationController
         song_relation = SongPlaylist.create(song_playlist_params)
         render json: song_relation
     end
+    def destroy
+        song_play = SongPlaylist.find_by(song_playlist_params)
+        song_play.destroy
+        render json: {message: "Successfully Removed!"}
+    end
 
     private
 
