@@ -91,3 +91,9 @@ audio{
 .music-card{
   width: 18em;
 }
+.ph{
+  display: inline;
+}
+h2{
+  text-align: center;
+}
