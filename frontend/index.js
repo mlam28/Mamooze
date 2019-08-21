@@ -12,13 +12,12 @@ function documentClick(e){
   nodes.forEach(node => {
     if (node.nodeName === 'FORM'){
         toggle = false
+       
     }
   })
     // if(e.target.nodeName === 'INPUT'){
-       
     //     toggle = false
     // } else if (e.target.nodeName === 'FORM' ) {
-       
     //    toggle = false
     // } else if (e.target.nodeName === 'LABEL'){
     //     toggle = false
@@ -27,9 +26,13 @@ function documentClick(e){
     // } else {
     //     toggle = true
     // }
+   
     if (form && toggle) {
         console.log(e.target)
+        let playlist_form_div = document.querySelector('div #clicked')
+        playlist_form_div.id = ''
         form.parentNode.remove()
+        
     }
 
     console.log(toggle)
@@ -159,18 +162,6 @@ function displaySong(song){
    }
 }
 
-// function getSongsArray(){
-//  let songsArray = []
-//  let songs = document.getElementsByClassName('song-card')
-//  Array.from(songs).forEach(song => {
-//      let obj = {}
-//      obj.name = song.dataset.song_name
-//      obj.artist = song.dataset.song_artist
-//      obj.url = song.dataset.song_url
-//      songsArray.push(obj)
-//  })
-//  return songsArray
-// }
 
 
 function playMusic(e, song){
@@ -203,15 +194,13 @@ function nextSong(e, songs){
 // (e) => showPlaylistForm(e, playlist_form_div)
 
 function fetchFormPlaylist(e, playlist_form_div){
-    let username = document.querySelector('#user').dataset.user_name
-    fetch(user_url).then(resp => resp.json()).then(users => {console.log(users);
-       
-        currentUser = users.find(function(user){
-            return user.username === username
-        });
-        showPlaylistForm(currentUser)
+    let user_id = document.querySelector('#user').dataset.user_id
+   
+    fetch(`${user_url}/${user_id}`).then(resp => resp.json()).then(user => {console.log(user);
+        showPlaylistForm(user)
     })
     playlist_form_div.id = 'clicked'
+   
 }
 
 let showPlaylistForm = (user) => {
@@ -222,7 +211,7 @@ let showPlaylistForm = (user) => {
     playlist_form.classList.add('playlist-form')
    playlist_form.innerHTML =  "<div class='form-group'><input type='text' name='playlist-name' placeholder='Name for New Playlist'></div><div class='form-group' id='playlist-select'><label>Or, add to existing:</label><select><option disabled selected value>--- select an option ---</option></select></div><input type='submit'>"
 
-   
+   if (user.playlists){
     user.playlists.forEach(playlist => {
     let selectTag = playlist_form.querySelector('select')
     let optionTag = document.createElement('option')
@@ -230,8 +219,9 @@ let showPlaylistForm = (user) => {
     optionTag.innerText = playlist.name
     selectTag.appendChild(optionTag)
    })
+}
 
-   
+ 
    divToDelete.appendChild(playlist_form)
    let playlist_form_div = document.querySelector('#clicked')
    playlist_form_div.appendChild(divToDelete)
@@ -246,7 +236,7 @@ console.log('hit playlist submit')
 e.preventDefault()
     let songId = e.target.parentElement.parentElement.dataset.song_id
     let userId = currentUser.id
-    debugger
+    let selectTag = e.currentTarget.querySelector('select')
   let option_value = e.currentTarget.querySelector('select').value
   let new_playlist_value = e.currentTarget.querySelector('input').value
 
@@ -258,10 +248,12 @@ e.preventDefault()
         return  (option_value === "") && (new_playlist_value === "")
         }
 
-    debugger
+
 
   if(checkFull() || checkEmpty()){
       alert('Please fill in one or the other, but not both.')
+      selectTag.value = ''
+      debugger
   } else if (option_value !== "") {
     fetch('http://localhost:3000/song_playlists', {
         method: 'POST',
@@ -270,7 +262,7 @@ e.preventDefault()
             'Accept': 'application/json'
         },
         body: JSON.stringify({song_id: songId , playlist_id: option_value})
-    }).then(resp => resp.json()).then(data => console.log(data))
+    }).then(resp => resp.json()).then(data => {console.log(data);  document.querySelector('.playlist-form').parentNode.remove()})
 
   } 
   else if (new_playlist_value !== "") {
@@ -281,7 +273,8 @@ e.preventDefault()
             'Accept': 'application/json'
         },
         body: JSON.stringify({name: new_playlist_value, song_ids: [songId], user_ids: [userId]})
-    }).then()
+    })
+    document.querySelector('.playlist-form').parentNode.remove()
   }
 }
 
@@ -310,6 +303,8 @@ e.preventDefault()
         h2.id = 'user'
         h2.innerText = `Welcome, ${user.username}`
         h2.dataset.user_name = user.username
+        h2.dataset.user_id = user.id
+        user_id = user.id
         let title = document.querySelector('h1')
         title.appendChild(h2)
 
@@ -319,11 +314,9 @@ e.preventDefault()
         login_button.style.display = 'none'
         logoutButt.style.display = 'block'
 
-        // let firstLi = document.querySelector('ul li')
-        // firstLi.appendChild(a)
-
         let playlist_button = document.querySelector('#playlist-button')
         playlist_button.style.display = 'block'
+        playlist_button.addEventListener("click", (e) => {fetchUser(e, user_id)})
 
        displayPage(user)
        displayPlaylists(user)
@@ -332,6 +325,12 @@ e.preventDefault()
      
 
     }
+
+    function fetchUser(e, user_id){
+        fetch(`${user_url}/${user_id} `).then(resp => resp.json()).then(user => displayPlaylists(user))
+    }
+
+   
 
     function logout(e){
         let navH2 = document.querySelector('h2')
@@ -349,7 +348,7 @@ e.preventDefault()
     function displayPage(user){
      let songCard =  document.querySelectorAll('.song-card')
      songCard.forEach(song =>  song.style.display = 'none')
-     playlist_button.addEventListener("click", () => {displayPlaylists(user)})
+     
     }       
           
  let content = document.getElementById('content-container')

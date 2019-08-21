@@ -16,7 +16,6 @@ class PlaylistsController < ApplicationController
     end
 
     def create
-        byebug
        playlist = Playlist.create(playlist_params)
         render json: playlist
     end
