@@ -1,8 +1,12 @@
 body{
-  background-image: url('https://cdn.pixabay.com/photo/2016/04/06/10/08/pink-1311251_960_720.jpg');
+  background-image: url('https://cdn.pixabay.com/photo/2016/06/02/02/38/mesh-1430108_960_720.png');
   background-size: cover;               
   background-repeat:   no-repeat;
   background-position: center center; 
+}
+
+h1 {
+  color: #007bff
 }
 
 .play-button-outer {
@@ -41,12 +45,21 @@ body{
   div#content-container{
       display: inline-block;
       margin-left: 20%;
-      max-height: 40em;
+      height: 40em;
       box-sizing: border-box;
       overflow: scroll;
       max-width: 70%;
       background: white;
+      margin-top: 80px;
+      box-shadow: 10px;
 
+  }
+
+  .head {
+    display: inline-block;
+    margin-left: 100px;
+    padding-top: 20px;
+    color: white;
   }
 
 .song-card{
@@ -110,16 +123,13 @@ audio{
 .music-card{
   width: 18em;
 }
-<<<<<<< HEAD
 
 .card-body{
   pointer-events: all
 }
-=======
 .ph{
   display: inline;
 }
 h2{
   text-align: center;
 }
->>>>>>> 985ad82ecdb918674461b94ef135e0d458b88195

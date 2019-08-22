@@ -130,7 +130,7 @@ function displaySong(song){
     songDiv.id = song.name
     songDiv.dataset.song_artist = song.artist
     songDiv.dataset.song_cover = song.cover_url
-    debugger
+    
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
     let titleDiv = document.createElement('div')
@@ -254,13 +254,13 @@ function nextSong(e, songs){
         return obj.url === e.target.src
     })
     let song_index = songs.indexOf(song_obj) 
-    debugger
+    
     e.target.src = songs[song_index += 1].url
-    debugger
+    
    let cardDiv = e.target.parentElement.children[0]
    cardDiv.querySelector('img').src = songs[song_index].song_cover
    cardDiv.querySelector('div h5').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
-    debugger
+    
 }
 
 // (e) => showPlaylistForm(e, playlist_form_div)
@@ -325,7 +325,7 @@ e.preventDefault()
   if(checkFull() || checkEmpty()){
       alert('Please fill in one or the other, but not both.')
       selectTag.value = ''
-      debugger
+      
   } else if (option_value !== "") {
     fetch('http://localhost:3000/song_playlists', {
         method: 'POST',
@@ -439,6 +439,7 @@ e.preventDefault()
         headerCont.innerHTML = ""
         let phead = document.createElement('h2')
         phead.innerText = "My Playlists"
+        phead.classList.add('head')
         headerCont.appendChild(phead)
          user.playlists.forEach((playlist) => {
            let playlistDiv = document.createElement('div')
@@ -596,14 +597,15 @@ let homeButton = document.querySelector('.home')
         headerCont.innerHTML = ''
         let publicHead = document.createElement('h2')
         publicHead.innerText = "Public Playlists"
+        publicHead.classList.add('head')
         headerCont.appendChild(publicHead)
         fetch('http://localhost:3000/public_playlists')
         .then(res => res.json())
         .then((playlists) => {
-            debugger
+            
             playlists.forEach((playlist) => {
                 console.log(playlist)
-                debugger
+                
             let playlistDiv = document.createElement('div')
            playlistDiv.className ='card'
            let playlistImg = document.createElement('img') 
@@ -632,7 +634,7 @@ function showPublicPlaylistSongs(e, playlist){
     listH4.innerText = playlist.name
     listDiv.appendChild(listH4)
     let plist = document.querySelectorAll('.card-body')
-    debugger
+    
  plist.forEach((list) => {
     if (list.innerText === playlist.name){
         let pImg = document.createElement('img') 
@@ -642,8 +644,9 @@ function showPublicPlaylistSongs(e, playlist){
          headerCont.innerHTML = ''
         let publicHead = document.createElement('h2')
         publicHead.innerText = "Public Playlists"
+        publicHead.classList.add('head')
         headerCont.appendChild(publicHead)
-    //   debugger   
+    //      
      playlist.songs.forEach((song) => {
      displaySong(song)})
      
