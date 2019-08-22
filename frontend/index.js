@@ -117,7 +117,57 @@ function loginUser(e){
     }
 
 
+function songHeaders(){
+
+    let songHeaderDiv = document.createElement('div')
+    songHeaderDiv.classList.add('row')
+    songHeaderDiv.id = 'song-headers'
+
+    let playbttnDiv = document.createElement('div')
+    playbttnDiv.classList.add('col-sm')
+    let playSpan = document.createElement('span')
+    playSpan.innerText = '#'
+    playbttnDiv.appendChild(playSpan)
+    songHeaderDiv.appendChild(playbttnDiv)
+
+    let titleDiv = document.createElement('div')
+    titleDiv.classList.add('col-sm')
+    let titleSpan = document.createElement('span')
+    titleSpan.innerText = 'Title'
+    titleDiv.appendChild(titleSpan)
+    songHeaderDiv.appendChild(titleDiv)
+    
+    
+    let artistDiv = document.createElement('div')
+    artistDiv.classList.add('col-sm')
+    let artistSpan = document.createElement('span')
+    artistSpan.innerText = 'Artist'
+    artistDiv.appendChild(artistSpan)
+    songHeaderDiv.appendChild(artistDiv)
+
+    let addbttn = document.createElement('div')
+    let addSpan = document.createElement('span')
+    addSpan.innerText = "Add"
+    addbttn.append(addSpan)
+    addbttn.classList.add('col-sm')
+    songHeaderDiv.appendChild(addbttn)
+    
+    container.appendChild(songHeaderDiv)
+
+    let pH3 = document.querySelector('h3')
+    if(!!currentUser && !!pH3) {
+        let delDiv = document.createElement('div')
+        delDiv.classList.add('col-sm')
+        let delSpan = document.createElement('span')
+        delSpan.innerText = '#'
+        delDiv.appendChild(delSpan)
+        songHeaderDiv.appendChild(delDiv)
+    }
+
+ }
+
 function fetchSongs(){
+    songHeaders()
     fetch(song_url).then(resp => resp.json()).then(songs => {console.log(songs); songs.forEach(displaySong)})
 }
 
@@ -128,6 +178,7 @@ function displaySong(song){
     songDiv.classList.add('song-card', 'row')
     songDiv.dataset.song_url = song.url
     songDiv.id = song.name
+    songDiv.dataset.song_name = song.name
     songDiv.dataset.song_artist = song.artist
     songDiv.dataset.song_cover = song.cover_url
     
@@ -228,7 +279,7 @@ function playMusic(e, song){
     // create card next to audio 
     let cardDiv = document.createElement('div')
     cardDiv.classList.add('card', 'music-card')
-
+    cardDiv.id = 'music-player-card'
     let songImg = document.createElement('img')
     songImg.src = song.cover_url
     songImg.classList.add('car-img-top', "cover-image")
@@ -237,12 +288,22 @@ function playMusic(e, song){
     cardBodyDiv.classList.add('card-body')
     cardDiv.appendChild(cardBodyDiv)
 
-    let cardTitle = document.createElement('h5')
+    let cardTitle = document.createElement('h7')
+    cardTitle.style.display = 'block'
     cardTitle.innerText = `${song.name} / ${song.artist}`
     cardBodyDiv.appendChild(cardTitle)
+
+    let forward = document.createElement('i')
+    forward.classList.add('fas', 'fa-step-forward')
+    let backward = document.createElement('i')
+    backward.classList.add('fas', 'fa-step-backward')
+    cardBodyDiv.appendChild(backward)
+    cardBodyDiv.appendChild(forward)
     player.insertBefore(cardDiv, audio)
     let songs = getSongsArray()
     
+    forward.addEventListener('click', (e) => forwardSong(e, songs))
+    backward.addEventListener('click', (e) => backwardSong(e, songs))
     audio.addEventListener('ended', (e) => nextSong(e, songs))
     
 }
@@ -259,11 +320,40 @@ function nextSong(e, songs){
     
    let cardDiv = e.target.parentElement.children[0]
    cardDiv.querySelector('img').src = songs[song_index].song_cover
-   cardDiv.querySelector('div h5').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
+   cardDiv.querySelector('div h7').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
     
 }
 
-// (e) => showPlaylistForm(e, playlist_form_div)
+function forwardSong(e, songs){
+    console.log('next song please')
+    let audio = document.querySelector('audio')
+    let cardDiv = document.querySelector('#music-player-card')
+    let song_obj = songs.find(function(obj){
+        return obj.url === audio.src
+    })
+    let song_index = songs.indexOf(song_obj) 
+    
+    audio.src = songs[song_index += 1].url
+    
+   cardDiv.querySelector('img').src = songs[song_index].song_cover
+   cardDiv.querySelector('div h7').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
+}
+
+function backwardSong(e, songs){
+    let audio = document.querySelector('audio')
+    let cardDiv = document.querySelector('#music-player-card')
+    let song_obj = songs.find(function(obj){
+        return obj.url === audio.src
+    })
+    let song_index = songs.indexOf(song_obj) 
+    
+    audio.src = songs[song_index -= 1].url
+    
+   cardDiv.querySelector('img').src = songs[song_index].song_cover
+   cardDiv.querySelector('div h7').innerText = `${songs[song_index].name} / ${songs[song_index].artist}`
+}
+
+
 
 function fetchFormPlaylist(e, playlist_form_div){
     let user_id = document.querySelector('#user').dataset.user_id
@@ -281,7 +371,7 @@ let showPlaylistForm = (user) => {
 
     let playlist_form = document.createElement('form')
     playlist_form.classList.add('playlist-form')
-   playlist_form.innerHTML =  "<div class='form-group'><input type='text' name='playlist-name' placeholder='Name for New Playlist'></div><div class='form-group' id='playlist-select'><label>Or, add to existing:</label><select><option disabled selected value>--- select an option ---</option></select></div><input type='submit'>"
+   playlist_form.innerHTML =  "<div class='form-group'><input type='text' name='playlist-name' placeholder='Name for New Playlist'></div><div class='form-group' id='playlist-select'><label>Or, add to existing:</label><select><option disabled selected value>--- select an option ---</option></select></div><input class='btn btn-primary' type='submit' value='Add'>"
 
    if (user.playlists){
     user.playlists.forEach(playlist => {
@@ -448,7 +538,7 @@ e.preventDefault()
            playlistImg.src = playlist.image_url
            playlistImg.className = 'car-img-top'
            let cardBodyDiv = document.createElement('div')
-           cardBodyDiv.className = ('card-body')
+           cardBodyDiv.classList.add('card-body', 'playlist-card')
            let cardText = document.createElement('p')
            cardBodyDiv.appendChild(cardText)
             cardText.innerText = playlist.name
@@ -467,7 +557,8 @@ e.preventDefault()
         listH3.dataset.id = playlist.id
         listH3.innerText = playlist.name
         listDiv.appendChild(listH3)
-        let plist = document.querySelectorAll('.card-body')
+        let plist = document.querySelectorAll('.playlist-card')
+      
      plist.forEach((list) => {
         if (list.innerText === playlist.name){
             let pImg = document.createElement('img') 
@@ -477,7 +568,7 @@ e.preventDefault()
              plistHead = document.createElement('h2')
              plistHead.innerText = playlist.name
              content.append(pImg, listH3)
-             
+             songHeaders()
          playlist.songs.forEach((song) => {
          displaySong(song)})
          
@@ -646,6 +737,7 @@ function showPublicPlaylistSongs(e, playlist){
         publicHead.innerText = "Public Playlists"
         publicHead.classList.add('head')
         headerCont.appendChild(publicHead)
+        songHeaders()
     //      
      playlist.songs.forEach((song) => {
      displaySong(song)})
