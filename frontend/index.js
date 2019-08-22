@@ -130,7 +130,6 @@ function displaySong(song){
     songDiv.id = song.name
     songDiv.dataset.song_artist = song.artist
     songDiv.dataset.song_cover = song.cover_url
-    debugger
     container.appendChild(songDiv)
     let songspan = document.createElement('span')
     let titleDiv = document.createElement('div')
@@ -377,7 +376,7 @@ e.preventDefault()
         h2.dataset.user_name = user.username
         h2.dataset.user_id = user.id
         user_id = user.id
-        let title = document.querySelector('h1')
+        let title = document.querySelector('#site-title')
         title.appendChild(h2)
 
         toggle_login = !toggle_login
@@ -416,6 +415,8 @@ e.preventDefault()
             form.style.display = 'block'
             e.target.style.display = 'none'
             playlist_button.style.display = 'none'
+            homeButt.style.display = 'none'
+            songsButt.style.display = 'none'
             login_button.style.display = 'block'
             form[0].value = ''
             currentUser = 0
@@ -603,7 +604,6 @@ let homeButton = document.querySelector('.home')
             debugger
             playlists.forEach((playlist) => {
                 console.log(playlist)
-                debugger
             let playlistDiv = document.createElement('div')
            playlistDiv.className ='card'
            let playlistImg = document.createElement('img') 
