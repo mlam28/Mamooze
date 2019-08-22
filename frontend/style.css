@@ -50,8 +50,22 @@ h1 {
       overflow: scroll;
       max-width: 70%;
       background: white;
-      margin-top: 80px;
-      box-shadow: 10px;
+      /* margin-top: 80px; */
+      /* box-shadow: 10px; */
+      padding-top: 2%;
+      padding-bottom: 4%;
+
+  }
+  #head-container{
+    padding-top: 10%;
+  }
+
+  .head {
+    display: inline-block;
+    margin-left: 100px;
+    color: white;
+    /* padding-top: 10%; */
+    padding-left: 3%;
 
   }
 
@@ -71,7 +85,7 @@ h1 {
   #navigation{
       width: 90%;
       display: inline-block;
-      padding-top: 0%;
+      padding-top: 23%;
   }
 
   #side-things {
@@ -130,6 +144,43 @@ audio{
 .ph{
   display: inline;
 }
+h1{
+  font-family: 'Fredericka the Great', cursive;
+  padding-top: 10%;
+  font-size: 60px;
+  color: #007bff
+}
+
 h2{
+  font-family: 'Amatic SC', cursive;
   text-align: center;
+  font-weight: bolder;
+  padding-bottom: 1%;
+  display: inline-block;
+  margin-left: 100px;
+  color: white;
+  /* padding-top: 10%; */
+  padding-left: 3%;
+  font-size: 45px;
+  
+}
+
+.nav-link{
+  font-family: 'Amatic SC', cursive;
+  font-size: 24px;
+  font-weight: bolder;
+  color: cyan;
+  padding-bottom: 10%;
+}
+#user{
+  font-family: 'Fredericka the Great', cursive;
+  font-size: 20px;
+  padding-bottom: 0%;
+  padding-right: 20%;
+  margin-left: 8%;
+}
+.sub{
+  width: 60px;
+  height: 30px;
+    margin-bottom: 4px;
 }

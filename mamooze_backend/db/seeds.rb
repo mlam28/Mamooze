@@ -76,13 +76,18 @@ end
 summerp = Playlist.create(name: 'what time is it? summertime')
 newp = Playlist.create(name: 'Aint No laws')
 year = Playlist.create(name: 'I took a trip to the year 3000')
+large = Playlist.create(name: 'Am I Original?')
 sam = User.create(name: 'Samantha Kane', username: 'sammo12')
 michelle = User.create(name: 'Michelle', username: 'shelly05')
 lisa = User.create(name: 'Lisa', username: 'lisuh88')
 nick = User.create(name: 'Nick', username: 'NickNack')
+chine = User.create(name: 'Chine', username: 'DjChine')
 UserPlaylist.create(user_id: sam.id, playlist_id: summerp.id)
 UserPlaylist.create(user_id: michelle.id, playlist_id: year.id)
 UserPlaylist.create(user_id: sam.id, playlist_id: newp.id)
+UserPlaylist.create(user_id: sam.id, playlist_id: large.id)
+UserPlaylist.create(user_id: chine.id, playlist_id: large.id)
+UserPlaylist.create(user_id: chine.id, playlist_id: summerp.id)
 
 
 SongPlaylist.create(song_id: Song.all[2].id, playlist_id: summerp.id)
@@ -101,10 +106,30 @@ SongPlaylist.create(song_id: Song.all[12].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[25].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[18].id, playlist_id: year.id)
 SongPlaylist.create(song_id: Song.all[13].id, playlist_id: year.id)
+SongPlaylist.create(song_id: Song.all[30].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[5].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[17].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[7].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[32].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[29].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[8].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[21].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[35].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[9].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[34].id, playlist_id: large.id)
+SongPlaylist.create(song_id: Song.all[22].id, playlist_id: large.id)
+
+
+
+
+
+
+
 
 guilty = PublicPlaylist.create(name: 'Guilty Pleasures')
 pump = PublicPlaylist.create(name: "Pump Up")
 master = PublicPlaylist.create(name: 'Master Mix')
+groovy = PublicPlaylist.create(name: "Let's Groove")
 SongPublicPlaylist.create(song_id: Song.all[29].id, public_playlist_id: guilty.id)
 SongPublicPlaylist.create(song_id: Song.all[34].id, public_playlist_id: guilty.id)
 SongPublicPlaylist.create(song_id: Song.all[35].id, public_playlist_id: guilty.id)
@@ -123,6 +148,11 @@ SongPublicPlaylist.create(song_id: Song.all[3].id, public_playlist_id: master.id
 SongPublicPlaylist.create(song_id: Song.all[6].id, public_playlist_id: master.id)
 SongPublicPlaylist.create(song_id: Song.all[9].id, public_playlist_id: master.id).id
 SongPublicPlaylist.create(song_id: Song.all[11].id, public_playlist_id: master.id)
-
+SongPublicPlaylist.create(song_id: Song.all[30].id, public_playlist_id: groovy.id)
+SongPublicPlaylist.create(song_id: Song.all[32].id, public_playlist_id: groovy.id)
+SongPublicPlaylist.create(song_id: Song.all[3].id, public_playlist_id: groovy.id)
+SongPublicPlaylist.create(song_id: Song.all[10].id, public_playlist_id: groovy.id)
+SongPublicPlaylist.create(song_id: Song.all[31].id, public_playlist_id: groovy.id)
+SongPublicPlaylist.create(song_id: Song.all[18].id, public_playlist_id: groovy.id)
 
 
